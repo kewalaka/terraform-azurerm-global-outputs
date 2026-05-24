@@ -7,16 +7,13 @@ Example access:
 DESCRIPTION
   value = {
     for pk, rk_map in var.reads : pk => {
-      for rk, keys in rk_map : rk => (
-        length(keys) > 0
-        ? {
-          for k in keys : k => try(
-            jsondecode(data.azurerm_storage_table_entity.read["${pk}/${rk}"].entity.outputs)[k],
-            null
-          )
-        }
-        : try(jsondecode(data.azurerm_storage_table_entity.read["${pk}/${rk}"].entity.outputs), {})
-      )
+      for rk, keys in rk_map : rk => {
+        for k in (
+          length(keys) > 0
+          ? keys
+          : keys(local.read_outputs["${pk}/${rk}"])
+        ) : k => try(local.read_outputs["${pk}/${rk}"][k], null)
+      }
     }
   }
 }

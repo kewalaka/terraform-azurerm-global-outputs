@@ -12,4 +12,10 @@ locals {
       ]
     ]) : entry.id => entry
   }
+
+  # Decode each entity once so output shaping can stay type-consistent.
+  read_outputs = {
+    for id, entity in data.azurerm_storage_table_entity.read :
+    id => try(jsondecode(entity.entity.outputs), {})
+  }
 }
