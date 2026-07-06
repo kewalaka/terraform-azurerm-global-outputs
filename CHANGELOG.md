@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Migrated to kewalaka github organisation and publish to Terraform registry
+
 ## 1.0.1
 
 ### Fixed
